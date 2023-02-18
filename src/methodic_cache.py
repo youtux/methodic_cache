@@ -1,15 +1,15 @@
 import math
 from collections.abc import MutableMapping
 from typing import Any, Callable, Dict, NewType, Optional, TypeVar
+from weakref import WeakKeyDictionary
+
+import cachetools
 
 try:
     from typing import TypeAlias  # type: ignore[attr-defined]
 except ImportError:
     from typing_extensions import TypeAlias
 
-from weakref import WeakKeyDictionary
-
-import cachetools
 
 __all__ = ("cached_method",)
 
