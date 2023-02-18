@@ -1,6 +1,12 @@
 import math
 from collections.abc import MutableMapping
-from typing import Any, Callable, NewType, TypeAlias, TypeVar
+from typing import Any, Callable, Dict, NewType, Optional, TypeVar
+
+try:
+    from typing import TypeAlias  # type: ignore[attr-defined]
+except ImportError:
+    from typing_extensions import TypeAlias
+
 from weakref import WeakKeyDictionary
 
 import cachetools
@@ -10,12 +16,12 @@ __all__ = ("cached_method",)
 
 T = TypeVar("T")
 
+# TODO: This should be parametric
+Method: TypeAlias = Callable[..., object]
 
-Method: TypeAlias = Callable[..., Any]
+MethodCache: TypeAlias = MutableMapping[Method, object]
 
-MethodCache: TypeAlias = MutableMapping[Method, Any]
-
-ObjectCache = NewType("ObjectCache", dict[Method, MethodCache])
+ObjectCache = NewType("ObjectCache", Dict[Method, MethodCache])
 
 CacheFactory = Callable[[], MethodCache]
 
@@ -27,7 +33,9 @@ def default_cache_factory() -> MethodCache:
     return cachetools.Cache(maxsize=math.inf)
 
 
-def get_cache(obj, method, cache_factory: CacheFactory | None = None) -> MethodCache:
+def get_cache(
+    obj: object, method: Method, cache_factory: Optional[CacheFactory] = None
+) -> MethodCache:
     try:
         instance_cache = _cache_by_object[obj]
     except KeyError:
