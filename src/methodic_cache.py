@@ -58,7 +58,7 @@ def get_cache(
 def cached_method(
     cache_factory: CacheFactory = default_cache_factory,
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:
-    def wrapped_methodcache(method: Callable[P, T]) -> Callable[P, T]:
+    def wrapper(method: Callable[P, T]) -> Callable[P, T]:
         def cache_getter(obj: object) -> MethodCache:
             slots = getattr(type(obj), "__slots__", None)
             if slots is not None and "__weakref__" not in slots:
@@ -71,4 +71,4 @@ def cached_method(
         # TODO: Add support to override the `lock` and `key` param
         return cachetools.cachedmethod(cache=cache_getter)(method)
 
-    return wrapped_methodcache
+    return wrapper
