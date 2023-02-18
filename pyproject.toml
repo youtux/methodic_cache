@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "methodic-cache"
+version = "0.1.0"
+description = "functools.cache() for methods, but done correctly"
+authors = ["Alessio Bogon <778703+youtux@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+# TODO: Try to support a lower version of cachetools
+cachetools = "^5.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
