@@ -1,6 +1,6 @@
 import math
 from collections.abc import MutableMapping
-from typing import Any, Callable, Dict, NewType, Optional, TypeVar
+from typing import Callable, Dict, NewType, Optional, TypeVar
 from weakref import WeakKeyDictionary
 
 import cachetools
@@ -60,7 +60,7 @@ def cached_method(
     cache_factory: CacheFactory = default_cache_factory,
 ) -> Callable[[Method], Method]:
     def wrapped_methodcache(method: Method) -> Method:
-        def cache_getter(obj: Any) -> MethodCache:
+        def cache_getter(obj: object) -> MethodCache:
             return get_cache(obj, method, cache_factory)
 
         # TODO: Add support to override the `lock` and `key` param
