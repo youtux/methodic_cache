@@ -10,6 +10,8 @@ try:
 except ImportError:
     from typing_extensions import TypeAlias
 
+# TODO: Add support for classes with __slots__
+
 
 __all__ = ("cached_method",)
 
@@ -61,6 +63,7 @@ def cached_method(
         def cache_getter(obj: Any) -> MethodCache:
             return get_cache(obj, method, cache_factory)
 
+        # TODO: Add support to override the `lock` and `key` param
         cached_method = cachetools.cachedmethod(cache=cache_getter)(method)
         return cached_method
 
