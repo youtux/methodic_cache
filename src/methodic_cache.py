@@ -69,7 +69,6 @@ def cached_method(
             return get_cache(obj, method, cache_factory)
 
         # TODO: Add support to override the `lock` and `key` param
-        cached_method = cachetools.cachedmethod(cache=cache_getter)(method)
-        return cached_method
+        return cachetools.cachedmethod(cache=cache_getter)(method)
 
     return wrapped_methodcache
