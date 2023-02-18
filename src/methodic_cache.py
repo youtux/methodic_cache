@@ -11,7 +11,7 @@ __all__ = ("cached_method",)
 T = TypeVar("T")
 
 
-Method = NewType("Method", Callable[[...], Any])
+Method: TypeAlias = Callable[..., Any]
 
 MethodCache: TypeAlias = MutableMapping[Method, Any]
 
