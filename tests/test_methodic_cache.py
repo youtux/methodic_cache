@@ -1,6 +1,8 @@
 import gc
 import weakref
 
+import pytest
+
 from methodic_cache import cached_method
 
 # TODO: Add tests for:
@@ -52,3 +54,37 @@ def test_no_leaks():
     assert foo_ref() is None
     assert param_ref() is None
     assert res_ref() is None
+
+
+def test_slotted_class_not_supported():
+    class Foo:
+        __slots__ = ("offset",)
+
+        def __init__(self, offset):
+            self.offset = offset
+
+        @cached_method()
+        def add(self, x):
+            return self.offset + x
+
+    foo = Foo(1)
+    with pytest.raises(TypeError, match="need to add.*__weakref__.*__slots__"):
+        assert foo.add(1) == 2
+
+
+def test_slotted_class_supported_if_weakref_slot_present():
+    # Ideally we would support slotted classes too
+    class Foo:
+        __slots__ = ("offset", "__weakref__")
+
+        def __init__(self, offset):
+            self.offset = offset
+
+        @cached_method()
+        def add(self, x):
+            return self.offset + x
+
+    foo = Foo(1)
+    assert foo.add(1) == 2
+    assert foo.add(2) == 3
+    assert Foo.add.cache(foo).currsize == 2

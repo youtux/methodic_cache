@@ -60,6 +60,12 @@ def cached_method(
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:
     def wrapped_methodcache(method: Callable[P, T]) -> Callable[P, T]:
         def cache_getter(obj: object) -> MethodCache:
+            slots = getattr(type(obj), "__slots__", None)
+            if slots is not None and "__weakref__" not in slots:
+                raise TypeError(
+                    "In order for `cached_method` to support classes with __slots__, "
+                    'you need to add the "__weakref__" attribute to the __slots__'
+                )
             return get_cache(obj, method, cache_factory)
 
         # TODO: Add support to override the `lock` and `key` param
