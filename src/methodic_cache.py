@@ -1,8 +1,9 @@
 import math
 import sys
+import weakref
 from collections.abc import MutableMapping
-from typing import Callable, Dict, Hashable, Optional, Tuple, TypeVar, Union, overload
-from weakref import WeakKeyDictionary
+from typing import Callable, Dict, Hashable, Optional, Self, Tuple, TypeVar, Union, overload
+from weakref import WeakKeyDictionary, WeakValueDictionary
 
 import cachetools
 
@@ -28,6 +29,35 @@ ObjectCache: TypeAlias = Dict[Callable[P, T], MethodCache[Tuple[Hashable], T]]
 _cache_by_object: WeakKeyDictionary[object, ObjectCache] = WeakKeyDictionary()
 
 
+class KeyRef:
+    _id2obj_dict = WeakValueDictionary()
+
+    def __eq__(self, other):
+        if isinstance(other, KeyRef):
+            return self.key == other.key
+        return NotImplemented
+
+    def __hash__(self):
+        return hash(self.key)
+
+    def __init__(self, obj):
+        self.key = id(obj)
+        if self in self._id2obj_dict:
+            assert obj is self._id2obj_dict[self]
+            return
+        self._id2obj_dict[self] = obj
+        weakref.finalize(obj, KeyRef._finalize, repr(self))
+
+    # TODO: Dev junk, remove it
+    @staticmethod
+    def _finalize(r):
+        print("destroying ", r)
+
+    @classmethod
+    def size(cls):
+        return len(cls._id2obj_dict)
+
+
 def default_cache_factory() -> MethodCache:
     return cachetools.Cache(maxsize=math.inf)
 
@@ -35,11 +65,12 @@ def default_cache_factory() -> MethodCache:
 def get_cache(
     obj: object, method: Callable[P, T], cache_factory: Optional[CacheFactory] = None
 ) -> MutableMapping[Tuple[Hashable], T]:
+    key_ref = KeyRef(obj)
     try:
-        instance_cache = _cache_by_object[obj]
-    except KeyError:
+        instance_cache = _cache_by_object[key_ref]
+    except KeyError as exc:
         # TODO: Should we use a WeakRefDictionary here too?
-        instance_cache = _cache_by_object[obj] = {}
+        instance_cache = _cache_by_object[key_ref] = {}
 
     try:
         method_cache = instance_cache[method]

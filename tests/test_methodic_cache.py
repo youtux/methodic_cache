@@ -3,7 +3,7 @@ import weakref
 
 import pytest
 
-from methodic_cache import cached_method, default_cache_factory
+from methodic_cache import KeyRef, cached_method, default_cache_factory
 
 # TODO: Add tests for:
 # - frozen dataclasses
@@ -135,3 +135,25 @@ def test_slotted_class_supported_if_weakref_slot_present():
     assert foo.add(1) == 2
     assert foo.add(2) == 3
     assert Foo.add.cache(foo).currsize == 2
+
+
+def test_non_hashable_object():
+    class Foo:
+        __hash__ = None
+
+        @cached_method()
+        def lst(self, x):
+            return [x]
+
+    foo = Foo()
+    with pytest.raises(TypeError, match="unhashable type"):
+        {foo}
+
+    res = foo.lst(1)
+    assert res == [1]
+    assert Foo.lst.cache(foo).currsize == 1
+
+    assert foo.lst(1) is res
+    del foo
+
+    assert KeyRef.size() == 0
