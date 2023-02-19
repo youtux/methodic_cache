@@ -11,6 +11,7 @@ from methodic_cache import cached_method
 # - non-hashable object
 # - `cache_factory` param
 # - using `lock` param
+# - test using multiple objects, same method
 
 
 def test_simple():
@@ -88,3 +89,17 @@ def test_slotted_class_supported_if_weakref_slot_present():
     assert foo.add(1) == 2
     assert foo.add(2) == 3
     assert Foo.add.cache(foo).currsize == 2
+
+
+def test_pure_decorator_without_call():
+    """Test that we can decorate methods without calling the decorator"""
+
+    class Foo:
+        @cached_method
+        def lst(self, x):
+            return [x]
+
+    foo = Foo()
+    res = foo.lst(1)
+    assert res == [1]
+    assert foo.lst(1) is res
