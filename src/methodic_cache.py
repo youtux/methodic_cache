@@ -12,7 +12,7 @@ else:
     from typing_extensions import ParamSpec, TypeAlias
 
 
-__all__ = ("cached_method",)
+__all__ = ("cached_method", "default_cache_factory")
 
 
 P = ParamSpec("P")

@@ -3,7 +3,7 @@ import weakref
 
 import pytest
 
-from methodic_cache import cached_method
+from methodic_cache import cached_method, default_cache_factory
 
 # TODO: Add tests for:
 # - frozen dataclasses
@@ -27,6 +27,52 @@ def test_simple():
     assert bar_cache.currsize == 1
     assert foo.bar(2) == 2
     assert bar_cache.currsize == 2
+
+
+class TestInvocationVariants:
+    @staticmethod
+    def no_parens():
+        class Foo:
+            @cached_method
+            def bar(self, x):
+                return x
+
+        return Foo
+
+    @staticmethod
+    def with_parens():
+        class Foo:
+            @cached_method()
+            def bar(self, x):
+                return x
+
+        return Foo
+
+    @staticmethod
+    def with_params():
+        class Foo:
+            @cached_method(cache_factory=default_cache_factory)
+            def bar(self, x):
+                return x
+
+        return Foo
+
+    @pytest.fixture
+    def Foo(self, request):
+        return request.param()
+
+    @pytest.mark.parametrize(
+        "Foo", [no_parens, with_parens, with_params], indirect=True
+    )
+    def test_simple(self, Foo):
+        foo = Foo()
+        assert foo.bar(1) == 1
+        bar_cache = Foo.bar.cache(foo)
+        assert bar_cache.currsize == 1
+        assert foo.bar(1) == 1
+        assert bar_cache.currsize == 1
+        assert foo.bar(2) == 2
+        assert bar_cache.currsize == 2
 
 
 def test_no_leaks():
