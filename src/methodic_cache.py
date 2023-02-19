@@ -29,33 +29,36 @@ ObjectCache: TypeAlias = Dict[Callable[P, T], MethodCache[Tuple[Hashable], T]]
 _cache_by_object: WeakKeyDictionary[object, ObjectCache] = WeakKeyDictionary()
 
 
-class KeyRef:
-    _id2obj_dict = WeakValueDictionary()
+class HashableWrapper(Hashable):
+    """Wrapper for objects that are not hashable.
+
+    It will stay alive as long as the object is alive.
+    """
+
+    _wrapper_to_obj = WeakValueDictionary()
+    __slots__ = ("key", "obj", "__weakref__")
+
+    def __init__(self, obj):
+        self.key = id(obj)
+        self._track(obj)
 
     def __eq__(self, other):
-        if isinstance(other, KeyRef):
+        if isinstance(other, HashableWrapper):
             return self.key == other.key
         return NotImplemented
 
     def __hash__(self):
         return hash(self.key)
 
-    def __init__(self, obj):
-        self.key = id(obj)
-        if self in self._id2obj_dict:
-            assert obj is self._id2obj_dict[self]
+    def _track(self, obj):
+        if self in self._wrapper_to_obj:
+            assert self._wrapper_to_obj[self] is obj, (
+                "There is already a wrapper for the provided object, but it's "
+                "pointing to a different object. This is probably a bug, "
+                "please report it."
+            )
             return
-        self._id2obj_dict[self] = obj
-        weakref.finalize(obj, KeyRef._finalize, repr(self))
-
-    # TODO: Dev junk, remove it
-    @staticmethod
-    def _finalize(r):
-        print("destroying ", r)
-
-    @classmethod
-    def size(cls):
-        return len(cls._id2obj_dict)
+        self._wrapper_to_obj[self] = obj
 
 
 def default_cache_factory() -> MethodCache:
@@ -65,12 +68,12 @@ def default_cache_factory() -> MethodCache:
 def get_cache(
     obj: object, method: Callable[P, T], cache_factory: Optional[CacheFactory] = None
 ) -> MutableMapping[Tuple[Hashable], T]:
-    key_ref = KeyRef(obj)
+    w = HashableWrapper(obj)
     try:
-        instance_cache = _cache_by_object[key_ref]
-    except KeyError as exc:
+        instance_cache = _cache_by_object[w]
+    except KeyError:
         # TODO: Should we use a WeakRefDictionary here too?
-        instance_cache = _cache_by_object[key_ref] = {}
+        instance_cache = _cache_by_object[w] = {}
 
     try:
         method_cache = instance_cache[method]

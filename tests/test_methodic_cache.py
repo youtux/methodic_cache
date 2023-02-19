@@ -3,7 +3,7 @@ import weakref
 
 import pytest
 
-from methodic_cache import KeyRef, cached_method, default_cache_factory
+from methodic_cache import cached_method, default_cache_factory
 
 # TODO: Add tests for:
 # - frozen dataclasses
@@ -152,8 +152,4 @@ def test_non_hashable_object():
     res = foo.lst(1)
     assert res == [1]
     assert Foo.lst.cache(foo).currsize == 1
-
     assert foo.lst(1) is res
-    del foo
-
-    assert KeyRef.size() == 0
