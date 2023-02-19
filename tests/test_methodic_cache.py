@@ -6,7 +6,6 @@ import pytest
 from methodic_cache import cached_method
 
 # TODO: Add tests for:
-# - classes with __slots__
 # - frozen dataclasses
 # - non-hashable object
 # - `cache_factory` param
