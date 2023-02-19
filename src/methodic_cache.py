@@ -1,8 +1,9 @@
 from __future__ import annotations
+
 import math
 import sys
 from collections.abc import MutableMapping
-from typing import Callable, Dict, Hashable, Optional, Tuple, TypeVar, Union, overload
+from typing import Callable, Dict, Hashable, Tuple, TypeVar, overload
 from weakref import WeakKeyDictionary
 
 import cachetools
@@ -35,8 +36,8 @@ def default_cache_factory() -> MethodCache:
 
 
 def get_cache(
-    obj: object, method: Callable[P, T], cache_factory: Optional[CacheFactory] = None
-) -> MutableMapping[Tuple[Hashable], T]:
+    obj: object, method: Callable[P, T], cache_factory: CacheFactory | None = None
+) -> MutableMapping[tuple[Hashable], T]:
     w = HashableWrapper(obj)
     try:
         instance_cache = _cache_by_object[w]
@@ -71,10 +72,10 @@ def cached_method(
 
 
 def cached_method(
-    method: Optional[Callable[P, T]] = None,
+    method: Callable[P, T] | None = None,
     *,
     cache_factory: CacheFactory = default_cache_factory,
-) -> Union[Callable[P, T], Callable[[Callable[P, T]], Callable[P, T]]]:
+) -> Callable[P, T] | Callable[[Callable[P, T]], Callable[P, T]]:
     if method is None:
 
         def wrapper(method: Callable[P, T]) -> Callable[P, T]:
