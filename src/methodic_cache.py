@@ -11,8 +11,6 @@ if sys.version_info >= (3, 10):
 else:
     from typing_extensions import ParamSpec, TypeAlias
 
-# TODO: Add support for classes with __slots__
-
 
 __all__ = ("cached_method",)
 
