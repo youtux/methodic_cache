@@ -1,17 +1,18 @@
+from __future__ import annotations
 import math
 import sys
-import weakref
 from collections.abc import MutableMapping
-from typing import Callable, Dict, Hashable, Optional, Self, Tuple, TypeVar, Union, overload
-from weakref import WeakKeyDictionary, WeakValueDictionary
+from typing import Callable, Dict, Hashable, Optional, Tuple, TypeVar, Union, overload
+from weakref import WeakKeyDictionary
 
 import cachetools
+
+from _hashable import HashableWrapper
 
 if sys.version_info >= (3, 10):
     from typing import ParamSpec, TypeAlias
 else:
     from typing_extensions import ParamSpec, TypeAlias
-
 
 __all__ = ("cached_method", "default_cache_factory")
 
@@ -27,38 +28,6 @@ CacheFactory = Callable[[], MethodCache]
 ObjectCache: TypeAlias = Dict[Callable[P, T], MethodCache[Tuple[Hashable], T]]
 
 _cache_by_object: WeakKeyDictionary[object, ObjectCache] = WeakKeyDictionary()
-
-
-class HashableWrapper(Hashable):
-    """Wrapper for objects that are not hashable.
-
-    It will stay alive as long as the object is alive.
-    """
-
-    _wrapper_to_obj = WeakValueDictionary()
-    __slots__ = ("key", "obj", "__weakref__")
-
-    def __init__(self, obj):
-        self.key = id(obj)
-        self._track(obj)
-
-    def __eq__(self, other):
-        if isinstance(other, HashableWrapper):
-            return self.key == other.key
-        return NotImplemented
-
-    def __hash__(self):
-        return hash(self.key)
-
-    def _track(self, obj):
-        if self in self._wrapper_to_obj:
-            assert self._wrapper_to_obj[self] is obj, (
-                "There is already a wrapper for the provided object, but it's "
-                "pointing to a different object. This is probably a bug, "
-                "please report it."
-            )
-            return
-        self._wrapper_to_obj[self] = obj
 
 
 def default_cache_factory() -> MethodCache:
