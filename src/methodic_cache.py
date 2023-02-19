@@ -54,20 +54,15 @@ def get_cache(
 
 
 @overload
-def cached_method(method: Callable[P, T]) -> Callable[P, T]:
-    ...
-
-
-@overload
 def cached_method(
-    *, cache_factory: CacheFactory
+    *, cache_factory: CacheFactory = ...
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:
     ...
 
 
 @overload
 def cached_method(
-    method: Callable[P, T], *, cache_factory: CacheFactory
+    method: Callable[P, T], *, cache_factory: CacheFactory = ...
 ) -> Callable[P, T]:
     ...
 
