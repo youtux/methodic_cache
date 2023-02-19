@@ -7,7 +7,6 @@ from methodic_cache import cached_method, default_cache_factory
 
 # TODO: Add tests for:
 # - frozen dataclasses
-# - non-hashable object
 # - `cache_factory` param
 # - using `lock` param
 # - test using multiple objects, same method
