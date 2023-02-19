@@ -35,7 +35,7 @@ class TestInvocationVariants:
         class Foo:
             @cached_method
             def bar(self, x):
-                return x
+                return [x]
 
         return Foo
 
@@ -44,7 +44,7 @@ class TestInvocationVariants:
         class Foo:
             @cached_method()
             def bar(self, x):
-                return x
+                return [x]
 
         return Foo
 
@@ -53,7 +53,7 @@ class TestInvocationVariants:
         class Foo:
             @cached_method(cache_factory=default_cache_factory)
             def bar(self, x):
-                return x
+                return [x]
 
         return Foo
 
@@ -66,12 +66,13 @@ class TestInvocationVariants:
     )
     def test_simple(self, Foo):
         foo = Foo()
-        assert foo.bar(1) == 1
+        res = foo.bar(1)
+        assert res == [1]
         bar_cache = Foo.bar.cache(foo)
         assert bar_cache.currsize == 1
-        assert foo.bar(1) == 1
+        assert foo.bar(1) is res
         assert bar_cache.currsize == 1
-        assert foo.bar(2) == 2
+        assert foo.bar(2) == [2]
         assert bar_cache.currsize == 2
 
 
@@ -134,17 +135,3 @@ def test_slotted_class_supported_if_weakref_slot_present():
     assert foo.add(1) == 2
     assert foo.add(2) == 3
     assert Foo.add.cache(foo).currsize == 2
-
-
-def test_pure_decorator_without_call():
-    """Test that we can decorate methods without calling the decorator"""
-
-    class Foo:
-        @cached_method
-        def lst(self, x):
-            return [x]
-
-    foo = Foo()
-    res = foo.lst(1)
-    assert res == [1]
-    assert foo.lst(1) is res
