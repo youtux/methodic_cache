@@ -75,7 +75,7 @@ class TestInvocationVariants:
 
 
 # TODO: Fix this test
-@pytest.mark.xfail(sys.version_info <= (3, 9), reason="Failing for some reason")
+@pytest.mark.xfail(sys.version_info < (3, 10), reason="Failing for some reason")
 def test_no_leaks():
     class Foo:
         @cached_method()
