@@ -92,6 +92,7 @@ jobs:
         source .venv/bin/activate
         coverage erase
         tox run -f ${{ matrix.toxfactor }}
+        coverage combine
         coverage xml
 
     - uses: codecov/codecov-action@v3
