@@ -44,10 +44,6 @@ jobs:
             toxfactor: py311
             ignore-typecheck-outcome: false
             ignore-test-outcome: false
-          - python-version: "3.11-dev"  # TODO: Remove me before merge
-            toxfactor: py312
-            ignore-typecheck-outcome: false
-            ignore-test-outcome: true
           - python-version: "3.12-dev"
             toxfactor: py312
             ignore-typecheck-outcome: false
