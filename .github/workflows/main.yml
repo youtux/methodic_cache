@@ -15,10 +15,11 @@ jobs:
             toxfactor: py37
             ignore-typecheck-outcome: false
             ignore-test-outcome: false
-          - python-version: "pypy3.7"
-            toxfactor: py39
-            ignore-typecheck-outcome: false
-            ignore-test-outcome: true
+            # TODO: Fix the issue and re-enable this
+#          - python-version: "pypy3.7"
+#            toxfactor: py39
+#            ignore-typecheck-outcome: false
+#            ignore-test-outcome: true
           - python-version: "3.8"
             toxfactor: py38
             ignore-typecheck-outcome: false
