@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "methodic-cache"
 version = "0.1.0"
-description = "functools.cache() for methods, but done correctly"
+description = "functools.cache() for methods, done correctly"
 authors = ["Alessio Bogon <778703+youtux@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
