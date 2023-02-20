@@ -54,6 +54,29 @@ multi_line_output = 3
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.coverage.report]
+exclude_lines = [
+    "if TYPE_CHECKING:",
+    "if typing\\.TYPE_CHECKING:",
+]
+[tool.coverage.html]
+show_contexts = true
+
+[tool.coverage.run]
+branch = true
+# `parallel` will cause each tox env to put data into a different file, so that we can combine them later
+parallel = true
+source = ["methodic_cache", "tests"]
+dynamic_context = "test_function"
+
+[tool.coverage.paths]
+# treat these directories as the same when combining
+# the first item is going to be the canonical dir
+source = [
+    "src/methodic_cache",
+    ".tox/*/lib/python*/site-packages/methodic_cache",
+]
+
 [tool.mypy]
 python_version = "3.7"
 warn_return_any = true
