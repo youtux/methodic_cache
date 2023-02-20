@@ -29,7 +29,6 @@ def test_simple():
 
 
 class TestInvocationVariants:
-    @staticmethod
     def no_parens():
         class Foo:
             @cached_method
@@ -38,7 +37,6 @@ class TestInvocationVariants:
 
         return Foo
 
-    @staticmethod
     def with_parens():
         class Foo:
             @cached_method()
@@ -47,7 +45,6 @@ class TestInvocationVariants:
 
         return Foo
 
-    @staticmethod
     def with_params():
         class Foo:
             @cached_method(cache_factory=default_cache_factory)
