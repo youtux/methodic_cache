@@ -91,7 +91,7 @@ jobs:
       run: |
         source .venv/bin/activate
         coverage erase
-        tox run-parallel -f ${{ matrix.toxfactor }} --parallel-no-spinner --parallel-live
+        tox run -f ${{ matrix.toxfactor }}
         coverage xml
 
     - uses: codecov/codecov-action@v3
