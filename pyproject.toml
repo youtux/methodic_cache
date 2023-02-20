@@ -29,13 +29,14 @@ classifiers = [
 python = "^3.7"
 # TODO: Try to support a lower version of cachetools
 cachetools = "^5.0.0"
-typing-extensions = {version = "^4.5.0", python = "3.7"}
+typing-extensions = {version = "^4.5.0", python = "<3.10"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"
 mypy = "^1.0.1"
 types-cachetools = "^5.3.0.0"
 pytest-repeat = "^0.9.1"
+coverage = {extras = ["toml"], version = "^7.1.0"}
 
 
 [tool.black]
@@ -57,3 +58,6 @@ disallow_untyped_defs = true
 disallow_untyped_calls = true
 disallow_incomplete_defs = true
 files = "src/**/*.py"
+
+[tool.pytest.ini_options]
+filterwarnings = ["error"]
