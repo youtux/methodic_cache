@@ -10,6 +10,7 @@ from methodic_cache import cached_method, default_cache_factory
 # - `cache_factory` param
 # - using `lock` param
 # - test using multiple objects, same method
+# - battle-test for memory leaks
 
 
 def test_simple():
