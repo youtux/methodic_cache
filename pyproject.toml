@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "methodic-cache"
-version = "0.1.1"
+version = "0.2.1"
 description = "functools.cache() for methods, done correctly"
 authors = ["Alessio Bogon <778703+youtux@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/youtux/methodic-cache"
+repository = "https://github.com/youtux/methodic_cache"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",

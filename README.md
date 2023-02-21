@@ -3,7 +3,7 @@
 
 # Features
 * Simple to use
-* Extendable with custom cache backends (e.g. LRUCache, LFUCache, etc.)
+* Extendable with [custom cache backends](#custom-cache-backends) (e.g. LRUCache, LFUCache, etc.)
 * Works with non-hashable objects
 * Works with [frozen/slotted classes](#using-classes-with-__slots__)
 * No memory leaks
@@ -65,7 +65,6 @@ The default cache backend is `cachetools.Cache(maxsize=math.inf)`, which will ke
 You can use a different cache backend by passing it as the `cache_factory` argument to `cached_method`:
 
 ```python
-# custom_cache_backend.py
 from methodic_cache import cached_method
 from cachetools import LRUCache
 
