@@ -2,20 +2,17 @@ from __future__ import annotations
 
 import math
 import sys
-from collections.abc import MutableMapping
-from typing import Callable, Dict, Hashable, Tuple, TypeVar, overload
+from typing import Callable, Dict, Hashable, MutableMapping, Tuple, TypeVar, overload
 from weakref import WeakKeyDictionary
 
 import cachetools
 
-from _hashable import HashableWrapper
+from ._hashable import HashableWrapper
 
 if sys.version_info >= (3, 10):
     from typing import ParamSpec, TypeAlias
 else:
     from typing_extensions import ParamSpec, TypeAlias
-
-__all__ = ("cached_method", "default_cache_factory")
 
 
 P = ParamSpec("P")
