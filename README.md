@@ -3,7 +3,7 @@
 
 # Features
 * Simple to use
-* Extendable with custom cache backends (e.g. LRUCache, LFUCache, etc.)
+* Extendable with [custom cache backends](#custom-cache-backends) (e.g. LRUCache, LFUCache, etc.)
 * Works with non-hashable objects
 * Works with [frozen/slotted classes](#using-classes-with-__slots__)
 * No memory leaks
