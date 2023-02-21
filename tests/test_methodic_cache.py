@@ -7,8 +7,6 @@ import pytest
 from methodic_cache import cached_method, default_cache_factory
 
 # TODO: Add tests for:
-# - frozen dataclasses
-# - `cache_factory` param
 # - using `lock` param
 # - test using multiple objects, same method
 # - battle-test for memory leaks
