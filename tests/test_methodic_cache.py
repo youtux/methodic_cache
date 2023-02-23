@@ -1,12 +1,9 @@
 import gc
-import sys
 import weakref
 
 import pytest
 
 from methodic_cache import cached_method, simple_cache_factory
-
-from .detect_leaks import test_memory_leaks
 
 # TODO: Add tests for:
 # - using `lock` param
@@ -127,16 +124,16 @@ class TestInvocationVariants:
         assert bar_cache.currsize == 2
 
 
-# TODO: Fix this test
-@pytest.mark.xfail(sys.version_info < (3, 10), reason="Failing for some reason")
 def test_no_leaks():
     class Foo:
         @cached_method()
-        def bar(self, x):
-            return x | {"foo"}
+        def bar(self, x: frozenset):
+            return x | {"bar"}
 
     foo = Foo()
-    param = frozenset()
+    # Not using just `frozenset()` because in python < 3.10 it seems to be
+    # shared
+    param = frozenset({"foo"})
 
     res = foo.bar(param)
     assert foo.bar(param) is res
@@ -145,9 +142,7 @@ def test_no_leaks():
     param_ref = weakref.ref(param)
     res_ref = weakref.ref(res)
 
-    del foo
-    del param
-    del res
+    del foo, param, res
 
     gc.collect()
 
@@ -214,24 +209,3 @@ def test_non_hashable_object():
     assert res == [1]
     assert Foo.lst.cache(foo).currsize == 1
     assert foo.lst(1) is res
-
-
-def test_leaks():
-    from .detect_leaks import test_memory_leaks
-
-    test_memory_leaks()
-
-
-def test_memory_leaks2() -> None:
-    class Foo:
-        @cached_method
-        def bar(self, x):
-            return [x]
-
-    foo = Foo()
-    foo_weak = weakref.ref(foo)
-    res = foo.bar(1)
-    del foo
-
-    gc.collect()
-    assert foo_weak() is None
