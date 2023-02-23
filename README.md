@@ -1,6 +1,6 @@
 # methodic_cache
 
-![Codecov](https://img.shields.io/codecov/c/github/youtux/methodic_cache)
+[![codecov](https://codecov.io/gh/youtux/methodic_cache/branch/main/graph/badge.svg?token=7LSah9W8zt)](https://codecov.io/gh/youtux/methodic_cache)
 
 `functools.cache()` for methods, done correctly.
 
