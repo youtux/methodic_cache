@@ -44,7 +44,7 @@ def test_cache_empty_if_no_calls():
     class Foo:
         @cached_method()
         def bar(self, x):
-            return x
+            return x  # pragma: no cover
 
     foo = Foo()
     assert Foo.bar.cache(foo).currsize == 0
@@ -163,11 +163,11 @@ def test_slotted_class_without_weakref_slot_are_not_supported():
 
         @cached_method()
         def add(self, x):
-            return self.offset + x
+            return self.offset + x  # pragma: no cover
 
     foo = Foo(1)
     with pytest.raises(TypeError, match="need to add.*__weakref__.*__slots__"):
-        assert foo.add(1) == 2
+        foo.add(1)
 
 
 def test_slotted_class_supported_if_weakref_slot_present():
