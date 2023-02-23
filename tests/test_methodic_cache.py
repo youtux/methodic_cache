@@ -6,6 +6,8 @@ import pytest
 
 from methodic_cache import cached_method, simple_cache_factory
 
+from .detect_leaks import test_memory_leaks
+
 # TODO: Add tests for:
 # - using `lock` param
 # - battle-test for memory leaks
@@ -212,3 +214,24 @@ def test_non_hashable_object():
     assert res == [1]
     assert Foo.lst.cache(foo).currsize == 1
     assert foo.lst(1) is res
+
+
+def test_leaks():
+    from .detect_leaks import test_memory_leaks
+
+    test_memory_leaks()
+
+
+def test_memory_leaks2() -> None:
+    class Foo:
+        @cached_method
+        def bar(self, x):
+            return [x]
+
+    foo = Foo()
+    foo_weak = weakref.ref(foo)
+    res = foo.bar(1)
+    del foo
+
+    gc.collect()
+    assert foo_weak() is None
