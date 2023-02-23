@@ -28,7 +28,7 @@ ObjectCache: TypeAlias = Dict[Callable[P, T], MethodCache[Tuple[Hashable], T]]
 _cache_by_object: WeakKeyDictionary[object, ObjectCache] = WeakKeyDictionary()
 
 
-def default_cache_factory() -> MethodCache:
+def simple_cache_factory() -> MethodCache:
     return cachetools.Cache(maxsize=math.inf)
 
 
@@ -66,7 +66,7 @@ def cached_method(
 def cached_method(
     method: Callable[P, T] | None = None,
     *,
-    cache_factory: CacheFactory = default_cache_factory,
+    cache_factory: CacheFactory = simple_cache_factory,
 ) -> Callable[P, T] | Callable[[Callable[P, T]], Callable[P, T]]:
     if method is None:
 

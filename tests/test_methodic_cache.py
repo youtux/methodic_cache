@@ -4,7 +4,7 @@ import weakref
 
 import pytest
 
-from methodic_cache import cached_method, default_cache_factory
+from methodic_cache import cached_method, simple_cache_factory
 
 # TODO: Add tests for:
 # - using `lock` param
@@ -58,7 +58,7 @@ class TestInvocationVariants:
 
     def with_params():
         class Foo:
-            @cached_method(cache_factory=default_cache_factory)
+            @cached_method(cache_factory=simple_cache_factory)
             def bar(self, x):
                 return [x]
 
