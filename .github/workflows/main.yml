@@ -15,7 +15,7 @@ jobs:
             toxfactor: py37
             ignore-typecheck-outcome: false
             ignore-test-outcome: false
-            # TODO: Fix the issue and re-enable this
+            # `typed-ast` is not available for PyPy 3.7 (required by mypy)
 #          - python-version: "pypy3.7"
 #            toxfactor: py37
 #            ignore-typecheck-outcome: false
@@ -97,5 +97,8 @@ jobs:
 
     - uses: codecov/codecov-action@v3
       with:
+        # Explicitly using the token in order to avoid Codecov rate limit errors
+        # See https://community.codecov.com/t/upload-issues-unable-to-locate-build-via-github-actions-api/3954
+        token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
         verbose: true # optional (default = false)
