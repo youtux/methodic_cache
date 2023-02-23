@@ -15,7 +15,7 @@ jobs:
             toxfactor: py37
             ignore-typecheck-outcome: false
             ignore-test-outcome: false
-            # TODO: Fix the issue and re-enable this
+            # `typed-ast` is not available for PyPy 3.7 (required by mypy)
 #          - python-version: "pypy3.7"
 #            toxfactor: py37
 #            ignore-typecheck-outcome: false
