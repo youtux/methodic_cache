@@ -1,7 +1,23 @@
+import pytest
+
 from methodic_cache._wrappers import HashableWrapper
 
 
-def test_hashable_wrapper_hashing_matches():
+def test_wrapper_is_hashable():
+    class Foo:
+        __hash__ = None
+
+    foo = Foo()
+
+    with pytest.raises(TypeError, match="unhashable type"):
+        {foo}
+
+    wrapped = HashableWrapper(foo)
+
+    assert {wrapped, wrapped} == {wrapped}
+
+
+def test_hashing_matches():
     class Foo:
         pass
 
@@ -16,7 +32,7 @@ def test_hashable_wrapper_hashing_matches():
     assert wrapped2 in {wrapped}
 
 
-def test_hashable_wrapper_hashing_does_not_match():
+def test_hashing_does_not_match():
     class Foo:
         pass
 
@@ -32,7 +48,7 @@ def test_hashable_wrapper_hashing_does_not_match():
     assert foo2_w not in {foo1_w}
 
 
-def test_hashable_wrapper_eq_returns_false_for_other_types():
+def test_eq_returns_false_for_other_types():
     class Foo:
         pass
 
