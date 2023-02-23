@@ -58,14 +58,14 @@ def get_cache(
 def cached_method(
     *, cache_factory: CacheFactory = ...
 ) -> Callable[[Callable[P, T]], Callable[P, T]]:
-    ...
+    ...  # pragma: no cover
 
 
 @overload
 def cached_method(
     method: Callable[P, T], *, cache_factory: CacheFactory = ...
 ) -> Callable[P, T]:
-    ...
+    ...  # pragma: no cover
 
 
 def cached_method(
