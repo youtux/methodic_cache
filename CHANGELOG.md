@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2023-02-23
+
 ### Changed
 
 - `methodic_cache.default_cache_factory` is now `methodic_cache.simple_cache_factory`
