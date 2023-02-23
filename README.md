@@ -1,5 +1,9 @@
 # methodic_cache
+
+![Codecov](https://img.shields.io/codecov/c/github/youtux/methodic_cache)
+
 `functools.cache()` for methods, done correctly.
+
 
 # Features
 * Simple to use
