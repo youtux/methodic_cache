@@ -32,8 +32,8 @@ def default_cache_factory() -> MethodCache:
     return cachetools.Cache(maxsize=math.inf)
 
 
-def get_cache(
-    obj: object, method: Callable[P, T], cache_factory: CacheFactory | None = None
+def ensure_cache(
+    obj: object, method: Callable[P, T], cache_factory: CacheFactory
 ) -> MutableMapping[tuple[Hashable], T]:
     w = HashableWrapper(obj)
     try:
@@ -45,11 +45,6 @@ def get_cache(
     try:
         method_cache = instance_cache[method]
     except KeyError:
-        if cache_factory is None:
-            raise TypeError(
-                "The cache for the provided object and method was never initialized"
-                "and it can't be created, since `cache_factory` param is None"
-            )
         method_cache = instance_cache[method] = cache_factory()
     return method_cache
 
@@ -89,7 +84,7 @@ def cached_method(
             )
 
         assert method is not None  # for mypy
-        return get_cache(obj, method, cache_factory)
+        return ensure_cache(obj, method, cache_factory)
 
     # TODO: Add support to override the `lock` and `key` param
     return cachetools.cachedmethod(cache=cache_getter)(method)

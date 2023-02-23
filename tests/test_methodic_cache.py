@@ -28,6 +28,17 @@ def test_simple():
     assert bar_cache.currsize == 2
 
 
+def test_error_if_no_cache_factory():
+    class Foo:
+        @cached_method()
+        def bar(self, x):
+            return x
+
+    foo = Foo()
+    with pytest.raises(TypeError, match="cache_factory"):
+        Foo.bar.cache(foo)
+
+
 class TestInvocationVariants:
     def no_parens():
         class Foo:
