@@ -4,6 +4,12 @@
 
 `functools.cache()` for methods, done correctly.
 
+`methodic_cache.cached_method` is a decorator that caches the return value of a method, based on the arguments passed to it.
+
+The peculiarity of this library is that it does not store anything on objects themselves, but rather on a separate WeakKeyDictionary where the lifetime of the cache matches the lifetime of the object.
+
+An advantage of this approach over storing the cache on the object itself when needed is that objects will keep their memory footprint smaller thanks to shared key dictionaries. See [PEP 412](https://peps.python.org/pep-0412/) and [The Dictionary Even Mightier - Brandon Rhodes at PyCon 2017, 00:21:02](https://www.youtube.com/watch?v=66P5FMkWoVU&t=1262s) for more details.
+
 
 # Features
 * Simple to use
