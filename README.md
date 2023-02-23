@@ -6,7 +6,7 @@
 * Extendable with [custom cache backends](#custom-cache-backends) (e.g. LRUCache, LFUCache, etc.)
 * Works with non-hashable objects
 * Works with [frozen/slotted classes](#using-classes-with-__slots__)
-* No memory leaks
+* Tested for memory leaks
 * 100% test coverage
 
 # Installation
