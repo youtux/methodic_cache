@@ -7,7 +7,6 @@
 * Works with non-hashable objects
 * Works with [frozen/slotted classes](#using-classes-with-__slots__)
 * Tested for memory leaks
-* 100% test coverage
 
 # Installation
 ```bash
