@@ -8,11 +8,24 @@ from methodic_cache import cached_method, simple_cache_factory
 
 # TODO: Add tests for:
 # - using `lock` param
-# - test using multiple objects, same method
 # - battle-test for memory leaks
 
 
-def test_simple():
+def test_method_no_params():
+    class Foo:
+        @cached_method()
+        def bar(self):
+            return [self]
+
+    foo = Foo()
+    res = foo.bar()
+    assert foo.bar() is res
+    assert Foo.bar.cache(foo).currsize == 1
+
+
+def test_cache_on_params():
+    """Test that passing different params to the same method doesn't use the cache"""
+
     class Foo:
         @cached_method()
         def bar(self, x):
@@ -36,6 +49,36 @@ def test_cache_empty_if_no_calls():
 
     foo = Foo()
     assert Foo.bar.cache(foo).currsize == 0
+
+
+def test_cache_persists_as_long_as_object_does():
+    class Foo:
+        @cached_method()
+        def bar(self, x):
+            return x
+
+    foo = Foo()
+    foo_bar_cache = Foo.bar.cache(foo)
+    foo.bar(1)
+    assert Foo.bar.cache(foo) is foo_bar_cache
+    assert foo_bar_cache.currsize == 1
+
+
+def test_multiple_objects_same_method():
+    """Test that different objects don't share the same cache"""
+
+    class Foo:
+        @cached_method()
+        def bar(self, x):
+            return [x]
+
+    foo1 = Foo()
+
+    foo2 = Foo()
+    foo1_1 = foo1.bar(1)
+
+    foo2_1 = foo2.bar(1)
+    assert foo1_1 is not foo2_1
 
 
 class TestInvocationVariants:
@@ -111,7 +154,10 @@ def test_no_leaks():
     assert res_ref() is None
 
 
-def test_slotted_class_not_supported():
+def test_slotted_class_without_weakref_slot_are_not_supported():
+    """Test that slotted classes are not supported if they don't have a
+    __weakref__ slot"""
+
     class Foo:
         __slots__ = ("offset",)
 
@@ -128,6 +174,8 @@ def test_slotted_class_not_supported():
 
 
 def test_slotted_class_supported_if_weakref_slot_present():
+    """Test that slotted classes are supported if they have a __weakref__ slot"""
+
     # Ideally we would support slotted classes too
     class Foo:
         __slots__ = ("offset", "__weakref__")
@@ -146,6 +194,8 @@ def test_slotted_class_supported_if_weakref_slot_present():
 
 
 def test_non_hashable_object():
+    """Test that non-hashable objects work normally"""
+
     class Foo:
         __hash__ = None
 
@@ -155,6 +205,7 @@ def test_non_hashable_object():
 
     foo = Foo()
     with pytest.raises(TypeError, match="unhashable type"):
+        # Make sure that foo is indeed not hashable
         {foo}
 
     res = foo.lst(1)
