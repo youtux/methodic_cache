@@ -1,5 +1,4 @@
 import gc
-import sys
 import weakref
 
 import pytest
@@ -125,16 +124,16 @@ class TestInvocationVariants:
         assert bar_cache.currsize == 2
 
 
-# TODO: Fix this test
-@pytest.mark.xfail(sys.version_info < (3, 10), reason="Failing for some reason")
 def test_no_leaks():
     class Foo:
         @cached_method()
-        def bar(self, x):
-            return x | {"foo"}
+        def bar(self, x: frozenset):
+            return x | {"bar"}
 
     foo = Foo()
-    param = frozenset()
+    # Not using just `frozenset()` because in python < 3.10 it seems to be
+    # shared
+    param = frozenset({"foo"})
 
     res = foo.bar(param)
     assert foo.bar(param) is res
@@ -143,9 +142,7 @@ def test_no_leaks():
     param_ref = weakref.ref(param)
     res_ref = weakref.ref(res)
 
-    del foo
-    del param
-    del res
+    del foo, param, res
 
     gc.collect()
 
