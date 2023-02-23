@@ -7,7 +7,7 @@ from weakref import WeakKeyDictionary
 
 import cachetools
 
-from ._hashable import HashableWrapper
+from ._wrappers import HashableWrapper
 
 if sys.version_info >= (3, 10):
     from typing import ParamSpec, TypeAlias
