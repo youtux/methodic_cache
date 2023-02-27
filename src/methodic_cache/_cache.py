@@ -76,13 +76,6 @@ def cached_method(
         return wrapper
 
     def cache_getter(obj: object) -> MethodCache:
-        slots = getattr(type(obj), "__slots__", None)
-        if slots is not None and "__weakref__" not in slots:
-            raise TypeError(
-                "In order for `cached_method` to support classes with __slots__, "
-                'you need to add the "__weakref__" attribute to the __slots__'
-            )
-
         assert method is not None  # for mypy
         return ensure_cache(obj, method, cache_factory)
 
