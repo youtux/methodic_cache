@@ -22,6 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2023-02-27
+
+### Fixed
+
+- Fix `methodic_cache.cached_method` not working with classes that inherit from slotted classes (but that are not slotted themselves) https://github.com/youtux/methodic_cache/pull/5
+
 ## [0.3.0] - 2023-02-23
 
 ### Changed
