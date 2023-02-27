@@ -3,6 +3,8 @@ from __future__ import annotations
 from collections.abc import Hashable
 from weakref import WeakValueDictionary
 
+from methodic_cache._exceptions import ObjectDoesNotSupportWeakRef
+
 
 class HashableWrapper(Hashable):
     """Wrapper for objects that are not hashable.
@@ -32,7 +34,16 @@ class HashableWrapper(Hashable):
                 "please report it."
             )
             return
-        _wrapper_to_obj[self] = obj
+        try:
+            _wrapper_to_obj[self] = obj
+        except TypeError as e:
+            raise ObjectDoesNotSupportWeakRef(
+                "The provided object does not support weak references. "
+                "This is probably because it has a __slots__ attribute, "
+                "but it does not have a __weakref__ slot. "
+                "Please add the __weakref__ slot to the __slots__ class "
+                "attribute."
+            ) from e
 
 
 _wrapper_to_obj: WeakValueDictionary[HashableWrapper, object] = WeakValueDictionary()

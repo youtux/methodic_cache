@@ -166,7 +166,9 @@ def test_slotted_class_without_weakref_slot_are_not_supported():
             return self.offset + x  # pragma: no cover
 
     foo = Foo(1)
-    with pytest.raises(TypeError, match="need to add.*__weakref__.*__slots__"):
+    with pytest.raises(
+        TypeError, match="does not support weak reference.*add.*__weakref__.*__slots__"
+    ):
         foo.add(1)
 
 
@@ -187,7 +189,32 @@ def test_slotted_class_supported_if_weakref_slot_present():
     foo = Foo(1)
     assert foo.add(1) == 2
     assert foo.add(2) == 3
+
     assert Foo.add.cache(foo).currsize == 2
+
+
+def test_class_inherits_from_slotted_class():
+    """Test that we can normally use classes that inherit from slotted classes
+    but that are not slotted themselves"""
+
+    class Parent:
+        __slots__ = ("foo",)
+
+    # Ideally we would support slotted classes too
+    class Child(Parent):
+        def __init__(self, foo, bar):
+            self.foo = foo
+            self.bar = bar
+
+        @cached_method()
+        def lst(self, x):
+            return [self.foo, self.bar, x]
+
+    foo = Child(1, 2)
+    res = foo.lst(3)
+    assert res == [1, 2, 3]
+    assert foo.lst(3) is res
+    assert Child.lst.cache(foo).currsize == 1
 
 
 def test_non_hashable_object():
