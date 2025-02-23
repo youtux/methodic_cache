@@ -22,6 +22,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add compatibility with python 3.13.
+
+### Changed
+
+- Using `uv` as the project manager
+
+### Deprecated
+
+### Removed
+
+- Drop compatibility with python 3.7 and 3.8. Supported versions are now 3.9, 3.10, 3.11, 3.12.
+
+### Fixed
+
+### Security
+
 ## [0.3.1] - 2023-02-27
 
 ### Fixed
