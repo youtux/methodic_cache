@@ -22,6 +22,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+- Using `uv` as the project manager
+
+### Deprecated
+
+### Removed
+
+- Compatibility with python 3.7
+
+### Fixed
+
+### Security
+
 ## [0.3.1] - 2023-02-27
 
 ### Fixed
