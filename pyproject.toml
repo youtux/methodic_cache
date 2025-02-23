@@ -1,11 +1,11 @@
-[tool.poetry]
+[project]
 name = "methodic-cache"
 version = "0.3.1"
 description = "functools.cache() for methods, done correctly"
-authors = ["Alessio Bogon <778703+youtux@users.noreply.github.com>"]
-license = "MIT"
+authors = [{ name = "Alessio Bogon", email = "778703+youtux@users.noreply.github.com" }]
+license = { text= "MIT" }
 readme = "README.md"
-repository = "https://github.com/youtux/methodic_cache"
+requires-python = ">=3.7"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -27,32 +27,38 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
+dependencies = [
+    # TODO: Try to support a lower version of cachetools
+    "cachetools>=5.0.0",
+    'typing-extensions>=4.5.0; python_version < "3.10"',
+]
 
-[tool.poetry.dependencies]
-python = "^3.7"
-# TODO: Try to support a lower version of cachetools
-cachetools = "^5.0.0"
-typing-extensions = {version = "^4.5.0", python = "<3.10"}
+[project.urls]
+Homepage = "https://github.com/youtux/methodic_cache"
+Repository = "https://github.com/youtux/methodic_cache.git"
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.2.1"
-mypy = "^1.0.1"
-types-cachetools = "^5.3.0.0"
-pytest-repeat = "^0.9.1"
-coverage = {extras = ["toml"], version = "^7.1.0"}
-tox = "^4.4.5"
-
+[dependency-groups]
+dev = [
+    "pytest>=7.2.1",
+    "mypy>=1.0.1",
+    "types-cachetools>=5.3.0.0",
+    "pytest-repeat>=0.9.1",
+    "coverage [toml] >=7.1.0",
+    "tox>=4.4.5",
+]
 
 [tool.black]
-target-version = ["py37", "py38", "py39", "py310", "py311"]
+target-version = ["py37", "py38", "py39", "py310", "py311", "py312"]
 
 [tool.isort]
 profile = "black"
 multi_line_output = 3
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+#requires = ["uv-build>=0.5.15,<0.6"]
+#build-backend = "uv_build"
+requires = ["setuptools>=75.8.0"]
+build-backend = "setuptools.build_meta"
 
 [tool.coverage.report]
 exclude_lines = [
