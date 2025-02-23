@@ -23,8 +23,16 @@ jobs:
             toxfactor: py310
             ignore-typecheck-outcome: false
             ignore-test-outcome: false
+          - python-version: "pypy3.10"
+            toxfactor: pypy310
+            ignore-typecheck-outcome: false
+            ignore-test-outcome: false
           - python-version: "3.11"
             toxfactor: py311
+            ignore-typecheck-outcome: false
+            ignore-test-outcome: false
+          - python-version: "pypy3.11"
+            toxfactor: pypy311
             ignore-typecheck-outcome: false
             ignore-test-outcome: false
           - python-version: "3.12"
