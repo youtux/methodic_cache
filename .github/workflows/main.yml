@@ -11,15 +11,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - python-version: "3.7"
-            toxfactor: py37
-            ignore-typecheck-outcome: false
-            ignore-test-outcome: false
-            # `typed-ast` is not available for PyPy 3.7 (required by mypy)
-#          - python-version: "pypy3.7"
-#            toxfactor: py37
-#            ignore-typecheck-outcome: false
-#            ignore-test-outcome: true
           - python-version: "3.8"
             toxfactor: py38
             ignore-typecheck-outcome: false
@@ -44,7 +35,7 @@ jobs:
             toxfactor: py311
             ignore-typecheck-outcome: false
             ignore-test-outcome: false
-          - python-version: "3.12-dev"
+          - python-version: "3.12"
             toxfactor: py312
             ignore-typecheck-outcome: false
             ignore-test-outcome: true
