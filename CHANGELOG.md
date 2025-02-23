@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Compatibility with python 3.7
+- Drop compatibility with python 3.7 and 3.8. Supported versions are now 3.9, 3.10, 3.11, 3.12.
 
 ### Fixed
 
