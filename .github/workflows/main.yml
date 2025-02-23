@@ -30,7 +30,11 @@ jobs:
           - python-version: "3.12"
             toxfactor: py312
             ignore-typecheck-outcome: false
-            ignore-test-outcome: true
+            ignore-test-outcome: false
+          - python-version: "3.13"
+            toxfactor: py313
+            ignore-typecheck-outcome: false
+            ignore-test-outcome: false
 
     steps:
     - uses: actions/checkout@v3
